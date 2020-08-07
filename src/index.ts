@@ -1,5 +1,6 @@
 const HYPHENS_POSITIONS = [8, 12, 16, 20];
-const VALUE_REGEXP = /^[0-9A-Fa-f]{32}$/;
+const UUIDSTRING_REGEXP = /^[0-9A-Fa-f]{32}$/;
+const UUID_REGEXP = /^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$/;
 
 /**
  * Insert value to a source array at position
@@ -21,7 +22,7 @@ export function toUUID (value: string) {
   if (typeof value !== 'string') {
     throw new Error(`Value must be string`);
   }
-  if (!VALUE_REGEXP.test(value)) {
+  if (!UUIDSTRING_REGEXP.test(value)) {
     throw new Error(`Value must be string of 32 hexadecimal numbers`);
   }
 
@@ -32,4 +33,20 @@ export function toUUID (value: string) {
     array = insert(array, position, '-');
   }
   return array.join('');
+}
+
+/**
+ * Format UUID to string without dashes 
+ * @param {string} UUID formatted string
+ * @returns {string} string without dashes
+ */
+export function fromUUID (value: string) {
+  if (typeof value !== 'string') {
+    throw new Error(`Value must be string`);
+  }
+  if (!UUID_REGEXP.test(value)) {
+    throw new Error(`Format does not match UUID. Ex.: '686813b5-1f5e-4992-901b-ec290552efd1'`);
+  }
+  
+  return value.replace(/-/g, '');
 }
